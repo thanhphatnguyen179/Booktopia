@@ -155,7 +155,7 @@
                                 <ul class="hm-dropdown">
                                     <li><a href="my-account.html">My Account</a></li>
                                     <li><a href="login-register.html">Login | Register</a></li>
-                                    <li><a href="wishlist.html">Wishlist</a></li>
+                                    <!-- <li><a href="wishlist.html">Wishlist</a></li> -->
                                     <li><a href="cart.html">Cart</a></li>
                                     <li><a href="checkout.html">Checkout</a></li>
                                     <li><a href="compare.html">Compare</a></li>
@@ -174,11 +174,11 @@
                 <div class="header-right_area">
                     <ul>
                         
-                        <li>
+                        <!-- <li>
                             <a href="wishlist.html" class="wishlist-btn">
                                 <i class="ion-android-favorite-outline"></i>
                             </a>
-                        </li>
+                        </li> -->
                         <li>
                             <a href="#mobileMenu" class="mobile-menu_btn toolbar-btn color--white d-lg-none d-block">
                                 <i class="ion-navicon"></i>
@@ -526,11 +526,11 @@
                                     <span class="mm-text">Login | Register</span>
                                 </a>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <a href="wishlist.html">
                                     <span class="mm-text">Wishlist</span>
                                 </a>
-                            </li>
+                            </li> -->
                             <li>
                                 <a href="cart.html">
                                     <span class="mm-text">Cart</span>

@@ -35,8 +35,28 @@
                                 <span>Chủ đề</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="chude_all.php">Tất cả chủ đề</a></li>
+                                <li><a href="chude_all.php">Danh sách chủ đề</a></li>
                                 <li><a href="chude_add.php">Thêm chủ đề</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="ri-store-2-line"></i>
+                                <span>Nhà cung cấp</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="nhacungcap_all.php">Danh sách nhà cung cấp</a></li>
+                                <li><a href="nhacungcap_add.php">Thêm nhà cung cấp</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="ri-store-2-line"></i>
+                                <span>Nhà xuất bản</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="nhaxuatban_all.php">Danh sách nhà xuất bản</a></li>
+                                <li><a href="nhaxuatban_add.php">Thêm nhà xuất bản</a></li>
                             </ul>
                         </li>
 

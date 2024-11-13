@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <!doctype html>
 <html class="no-js" lang="en">
 
@@ -42,7 +44,8 @@
     <!-- Main Style CSS (Please use minify version for better website load performance) -->
     <link rel="stylesheet" href="assets/css/style.css">
     <!--<link rel="stylesheet" href="assets/css/style.min.css">-->
-
+    <!-- SweetAlert2 CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 

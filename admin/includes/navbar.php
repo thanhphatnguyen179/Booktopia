@@ -15,19 +15,6 @@
                             </a>
                         </li>
 
-                        <li>
-                            <a href="calendar.html" class=" waves-effect">
-                                <i class="ri-calendar-2-line"></i>
-                                <span>Calendar</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="apps-chat.html" class=" waves-effect">
-                                <i class="ri-chat-1-line"></i>
-                                <span>Chat</span>
-                            </a>
-                        </li>
 
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
@@ -60,6 +47,27 @@
                             </ul>
                         </li>
 
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="ri-store-2-line"></i>
+                                <span>Tác giả</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="tacgia_all.php">Danh sách tác giả</a></li>
+                                <li><a href="tacgia_add.php">Thêm tác giả </a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="ri-store-2-line"></i>
+                                <span>Quản lý sách</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="sach_all.php">Danh sách sách</a></li>
+                                
+                                <li><a href="sach_add.php">Thêm sách mới</a></li>
+                            </ul>
+                        </li>
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
                                 <i class="ri-store-2-line"></i>

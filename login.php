@@ -18,6 +18,12 @@
         <!-- App Css-->
         <link href="admin/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 
+        <!-- SweetAlert2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.min.css" rel="stylesheet">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.all.min.js"></script>
+
     </head>
 
     <body class="auth-body-bg">
@@ -43,18 +49,18 @@
                                             </div>
 
                                             <div class="p-2 mt-5">
-                                                <form class="form-horizontal" action="includes/function_auth_login.php" method="post">
+                                                <form class="form-horizontal" action="./admin/functions/functions/login.php" method="post">
                     
                                                     <div class="form-group auth-form-group-custom mb-4">
                                                         <i class="ri-user-2-line auti-custom-input-icon"></i>
                                                         <label for="username">Phone number</label>
-                                                        <input type="text" class="form-control" id="username" placeholder="Enter phone number" name="phone" required >
+                                                        <input type="text" class="form-control" id="username" placeholder="Enter phone number" name="username" required >
                                                     </div>
                             
                                                     <div class="form-group auth-form-group-custom mb-4">
                                                         <i class="ri-lock-2-line auti-custom-input-icon"></i>
-                                                        <label for="userpassword">Password</label>
-                                                        <input type="password" class="form-control" id="userpassword" placeholder="Enter password" name="password" required >
+                                                        <label for="password">Password</label>
+                                                        <input type="password" class="form-control" id="password" placeholder="Enter password" name="password" required >
                                                     </div>
                             
                                                     <div class="custom-control custom-checkbox">

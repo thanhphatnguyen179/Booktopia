@@ -132,6 +132,7 @@ if (!$sach_QUERY) {
     word-wrap: break-word;"><?php echo $row_TG_Ten['TG_Ten']; ?></td>
     <td style="height: 100px; vertical-align: middle; text-align: center;"><?php echo $row_soluong['soluong']; ?></td>
     <td style="height: 100px; vertical-align: middle; text-align: center;">
+        <a href="sach_detail.php?S_Ma=<?php echo $S_Ma; ?>" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="Detail"><i class="ri  ri-information-line font-size-18"></i></a>
         <a href="sach_edit.php?S_Ma=<?php echo $S_Ma; ?>" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
         <a onclick="confirmDelete('<?php echo $S_Ma; ?>');" class="text-danger" data-toggle="tooltip" data-placement="top" title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></a>
     </td>

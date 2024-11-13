@@ -1,4 +1,7 @@
+
 <?php ob_start(); ?>
+
+
 
 
 <?php include('includes/db.php'); ?>
@@ -118,15 +121,79 @@
             <div class="container">
                 <div class="sp-nav">
                     <div class="row">
-                        <div class="col-lg-5 col-md-5">
-                            <div class="sp-img_area">
-                                <div class="zoompro-border">
-                                    <img class="zoompro" src="<?php echo $S_HinhAnh; ?>" data-zoom-image="<?php echo $S_HinhAnh; ?>" alt="<?php echo $S_Ten; ?>" />
-                                </div>
-                                
-                            </div>
-                        </div>
-                        <div class="col-lg-7 col-md-7">
+                    <div class="col-lg-4 col-md-5">
+    <div class="sp-img_area">
+        <div class="zoompro-border">
+            <img class="img-fluid zoompro" src="<?php echo $S_HinhAnh; ?>" data-zoom-image="<?php echo $S_HinhAnh; ?>" alt="<?php echo $S_Ten; ?>" />
+        </div>
+    </div>
+    <form id="addToCartForm" action="" method="post">
+
+    <div class="d-flex mt-4">
+        <!-- Add to Cart Button -->
+        <button type="button" class="btn btn-outline-primary mr-2 flex-fill" onclick="addToCart()">
+            <i class="fas fa-shopping-cart"></i> Thêm vào giỏ hàng
+        </button>
+
+        <!-- Buy Now Button -->
+        <button type="button" class="btn btn-primary  flex-fill" onclick="buyNow()">
+            <i class="fas fa-bolt"></i> Mua ngay
+        </button>
+    </div>
+</div>
+ <!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function addToCart() {
+        const form = document.getElementById("addToCartForm");
+        const formData = new FormData(form);
+
+        // Tạo yêu cầu AJAX với JavaScript thuần
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "./includes/cart/cart_add.php", true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+
+                if (response.status === "success") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công!',
+                        text: response.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi!',
+                        text: response.message,
+                        showConfirmButton: true
+                    });
+                }
+            }
+        };
+        xhr.send(formData);
+    }
+
+    function buyNow() {
+        Swal.fire({
+            icon: 'info',
+            title: 'Mua ngay!',
+            text: 'Bạn đang tiến hành mua sản phẩm này.',
+            showConfirmButton: true,
+            confirmButtonText: 'Tiếp tục'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'checkout.php';
+            }
+        });
+    }
+</script>
+
+
+
+                        <div class="col-lg-8 col-md-7">
                             <div class="sp-content">
                                 <div class="sp-heading">
                                     <h2><?php echo $S_Ten; ?></h2>
@@ -152,60 +219,187 @@
 <li>Số trang: <?php echo $S_SoTrang; ?></li>
 <li>Hình thức: <a href="javascript:void(0)"><?php echo $S_HinhThuc; ?></a></li>
 
+
+
                                                     
                                     </ul>
                                 </div>
                                 
                                 <div class="quantity">
+                                    <input type="hidden" name="S_Ma" value="<?php echo $_GET['bookid']; ?>">
+                                    <input type="hidden" name="ND_Ma" value="<?php echo $_SESSION['ND_Ma']; ?>">
+
                                     <label>Số lượng</label>
                                     <div class="cart-plus-minus">
-                                        <input class="cart-plus-minus-box" value="1" type="text">
+                                        <input class="cart-plus-minus-box" value="1" type="text" name="S_SoLuong">
                                         <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
                                         <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
                                     </div>
                                 </div>
 
+
+                                
+
                                 <div class="don_gia_sach">
                                     <h3><?php echo number_format($S_DonGia, 0, ',', '.') . 'đ'; ?></h3>
                                 </div>
 
-
-                                <div class="qty-btn_area">
-                                    <ul>
-                                        <li><a class="qty-cart_btn" href="cart.html">Add To Cart</a></li>
-                                        <li><a class="qty-wishlist_btn" href="wishlist.html" data-toggle="tooltip" title="Add To Wishlist"><i class="ion-android-favorite-outline"></i></a></li>
-                                        
-                                    </ul>
-                                </div>
-                                <!-- <div class="hiraola-tag-line">
-                                    <h6>Tags:</h6>
-                                    <a href="javascript:void(0)">Ring</a>,
-                                    <a href="javascript:void(0)">Necklaces</a>,
-                                    <a href="javascript:void(0)">Braid</a>
-                                </div> -->
-                                <!-- <div class="hiraola-social_link">
-                                    <span>Hãy liên hệ với chúng tôi thông qua: </span>
-                                    <ul>
-                                        <li class="facebook">
-                                            <a href="https://www.facebook.com" data-toggle="tooltip" target="_blank" title="Facebook">
-                                                <i class="fab fa-facebook"></i>
-                                            </a>
-                                        </li>
-                                        
-                                        <li class="youtube">
-                                            <a href="https://www.youtube.com" data-toggle="tooltip" target="_blank" title="Youtube">
-                                                <i class="fab fa-youtube"></i>
-                                            </a>
-                                        </li>
-                                        
-                                        <li class="instagram">
-                                            <a href="https://rss.com" data-toggle="tooltip" target="_blank" title="Instagram">
-                                                <i class="fab fa-instagram"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div> -->
+                                
+                                </form>
                             </div>
+                            <br>
+                            <br>
+
+                            <div class="sp-content">
+    <h4>Giao hàng đến địa chỉ</h4>
+
+    <!-- Radio buttons -->
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="addressOption" id="addressOption1" checked>
+        <label class="form-check-label" for="addressOption1">
+            Địa chỉ
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="addressOption" id="addressOption2">
+        <label class="form-check-label" for="addressOption2">
+            Chọn địa chỉ giao hàng
+        </label>
+    </div>
+
+    <!-- Table for selecting address -->
+    <div id="addressSelection" class="mt-3" style="display: none;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tỉnh/Thành phố</th>
+                    <th>Quận/Huyện</th>
+                    <th>Phường/Xã/Thị trấn</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <select class="form-control" id="province">
+                            <option value="" selected disabled>Chọn Tỉnh/Thành phố</option>
+                            <!-- Options will be populated by AJAX -->
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-control" id="district">
+                            <option value="" selected disabled>Chọn Quận/Huyện</option>
+                            <!-- Options will be populated by AJAX -->
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-control" id="ward">
+                            <option value="" selected disabled>Chọn Phường/Xã/Thị trấn</option>
+                            <!-- Options will be populated by AJAX -->
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <label for="houseNumber">Số nhà</label>
+                        <input type="text" id="houseNumber" class="form-control" placeholder="Nhập số nhà">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="mt-3">
+            <h3>Chi phí vận chuyển: <span id="shippingCost" style="color:red;"></span></h3> 
+        </div>
+        
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+    // Khi radio "Chọn địa chỉ giao hàng" được chọn, hiển thị bảng địa chỉ
+    $('input[name="addressOption"]').change(function() {
+        if ($('#addressOption2').is(':checked')) {
+            $('#addressSelection').show();
+        } else {
+            $('#addressSelection').hide();
+        }
+    });
+
+    // Lấy các tỉnh/thành phố khi trang được tải
+    $.ajax({
+        url: './includes/functions/get_provinces.php',  // URL PHP để lấy danh sách tỉnh thành
+        method: 'GET',
+        success: function(response) {
+            const provinces = JSON.parse(response);
+            $('#province').html('<option>Chọn Tỉnh/Thành phố</option>');
+            provinces.forEach(function(province) {
+                $('#province').append('<option value="' + province.TTP_Ma + '">' + province.TTP_Ten + '</option>');
+            });
+        }
+    });
+
+    // Lấy các quận/huyện khi chọn tỉnh/thành phố
+    $('#province').change(function() {
+        const provinceId = $(this).val();
+        if (provinceId) {
+            // Gọi AJAX để lấy đơn giá vận chuyển cho tỉnh này
+            $.ajax({
+                url: './includes/functions/get_shipping_cost.php',
+                method: 'GET',
+                data: { provinceId: provinceId },
+                success: function(response) {
+                    const data = JSON.parse(response);
+                    // Hiển thị chi phí vận chuyển
+                    $('#shippingCost').text(data.shippingCost + ' VND');
+                }
+            });
+
+            // Gọi AJAX để lấy quận/huyện mới
+            $.ajax({
+                url: './includes/functions/get_districts.php',
+                method: 'GET',
+                data: { provinceId: provinceId },
+                success: function(response) {
+                    const districts = JSON.parse(response);
+                    $('#district').html('<option>Chọn Quận/Huyện</option>');
+                    districts.forEach(function(district) {
+                        $('#district').append('<option value="' + district.QH_Ma + '">' + district.QH_Ten + '</option>');
+                    });
+                }
+            });
+        } else {
+            // Nếu không có tỉnh, reset tất cả các dropdown còn lại
+            $('#district').html('<option value="" selected disabled>Chọn Quận/Huyện</option>');
+            $('#ward').html('<option value="" selected disabled>Chọn Phường/Xã/Thị trấn</option>');
+            $('#shippingCost').text('Chi phí vận chuyển:');  // Clear shipping cost
+        }
+    });
+
+    // Lấy các phường/xã khi chọn quận/huyện
+    $('#district').change(function() {
+        const districtId = $(this).val();
+        if (districtId) {
+            $.ajax({
+                url: './includes/functions/get_wards.php',  // URL PHP để lấy danh sách phường xã
+                method: 'GET',
+                data: { districtId: districtId },
+                success: function(response) {
+                    const wards = JSON.parse(response);
+                    $('#ward').html('<option>Chọn Phường/Xã/Thị trấn</option>');
+                    wards.forEach(function(ward) {
+                        $('#ward').append('<option value="' + ward.XPTT_Ma + '">' + ward.XPTT_Ten + '</option>');
+                    });
+                }
+            });
+        } else {
+            // Nếu không có quận, reset lại phường/xã/ thị trấn
+            $('#ward').html('<option value="" selected disabled>Chọn Phường/Xã/Thị trấn</option>');
+        }
+    });
+});
+
+</script>
                         </div>
                     </div>
                 </div>
@@ -376,7 +570,7 @@ Cuốn sách này thực sự tuyệt vời và đáng đọc. Từ nội dung �
 
 
 
-        
+        =
         
 
         </div>

@@ -64,7 +64,7 @@
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
                                 <li><a href="sach_all.php">Danh sách sách</a></li>
-                                <li><a href="sach_detail.php">Chi tiết sách</a></li>
+                                
                                 <li><a href="sach_add.php">Thêm sách mới</a></li>
                             </ul>
                         </li>

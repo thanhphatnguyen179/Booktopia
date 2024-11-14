@@ -8,10 +8,18 @@
 <?php include('includes/header.php'); ?>
 <head>
     <style>
-        .don_gia_sach h3 {
-            color: red;
+        .don_gia_sach h3{
+
+            font-size: 16px;
             margin-top: 20px;
             /* font-size: 20px; */
+        }
+    </style>
+    <style>
+        .tong_tien_tam_tinh span {
+            color: red;
+            margin-top: 20px;
+
         }
     </style>
 </head>
@@ -241,11 +249,15 @@
                                 
 
                                 <div class="don_gia_sach">
-                                    <h3><?php echo number_format($S_DonGia, 0, ',', '.') . 'đ'; ?></h3>
+                                    <h3><span>Đơn giá: </span><span id="don_gia" class="amount formatMoney" data-amount=<?php echo $S_DonGia; ?> ></span></h3>
                                 </div>
 
                                 
                                 </form>
+
+                                <div class="tong_tien_tam_tinh">
+                                    <h3>Tổng tiền tạm tính: <span id="tongtien" class="amount formatMoney" data-amount=<?php echo $S_DonGia; ?> ></span></h3>
+                                </div>
                             </div>
                             <br>
                             <br>
@@ -578,3 +590,117 @@ Cuốn sách này thực sự tuyệt vời và đáng đọc. Từ nội dung �
 <?php include('includes/footer.php'); ?>
 
 <?php ob_end_flush(); ?>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Lấy tất cả các phần tử có class 'formatMoney'
+    const elements = document.querySelectorAll('.formatMoney');
+    
+    // Hàm định dạng tiền VND
+    function formatMoney() {
+        // Duyệt qua tất cả các phần tử và áp dụng định dạng tiền VND
+        elements.forEach(function (element) {
+            // Lấy giá trị tiền trong phần tử (giả sử giá trị trong thuộc tính data-amount)
+            const amount = parseFloat(element.getAttribute('data-amount'));
+            
+            // Kiểm tra nếu amount hợp lệ
+            if (!isNaN(amount)) {
+                // Định dạng tiền VND
+                element.textContent = new Intl.NumberFormat('vi-VN', { 
+                    style: 'currency', 
+                    currency: 'VND' 
+                }).format(amount);
+            }
+        });
+    }
+
+    // Gọi hàm formatMoney khi trang tải xong
+    formatMoney();
+
+    // Đăng ký sự kiện onchange cho các phần tử input hoặc các phần tử có class 'formatMoney'
+    elements.forEach(function (element) {
+        element.addEventListener('input', function () {
+            // Cập nhật giá trị mới vào thuộc tính data-amount
+            element.setAttribute('data-amount', element.value);
+            // Gọi lại hàm để định dạng tiền sau khi cập nhật giá trị
+            formatMoney();
+        });
+
+        // Nếu bạn muốn cập nhật khi giá trị bị thay đổi sau khi người dùng hoàn thành nhập, có thể sử dụng sự kiện change hoặc blur
+        element.addEventListener('change', function () {
+            element.setAttribute('data-amount', element.value);
+            formatMoney(); // Cập nhật định dạng khi giá trị thay đổi
+        });
+
+        element.addEventListener('blur', function () {
+            element.setAttribute('data-amount', element.value);
+            formatMoney(); // Cập nhật định dạng khi trường input bị bỏ đi
+        });
+    });
+});
+
+</script>
+
+
+
+<script>
+    
+
+document.querySelectorAll('.inc.qtybutton, .dec.qtybutton').forEach(button => {
+    button.addEventListener('click', function () {
+        const quantityInput = button.parentElement.querySelector('.cart-plus-minus-box');
+        let quantity = parseInt(quantityInput.value);
+        
+        const unitPrice = parseFloat(getElementById('don_gia').getAttribute('data-amount')); // Đơn giá
+        const TotalElement = getElementById('tongtien');
+
+        // Cập nhật giá trị số lượng
+        quantityInput.value = quantity;
+
+        // Tính toán tổng giá trị (số lượng * đơn giá)
+        const total = quantity * unitPrice;
+
+        // Cập nhật giá trị cho thuộc tính data-amount và nội dung hiển thị
+        TotalElement.setAttribute('data-amount', total); // Cập nhật giá trị trong data-amount
+        TotalElement.textContent = formatCurrency(total);
+        
+    });                               
+    
+});
+// Thêm sự kiện onchange cho quantityInput
+document.querySelectorAll('.cart-plus-minus-box').forEach(quantityInput => {
+    quantityInput.addEventListener('change', function () {
+        let quantity = parseInt(quantityInput.value);
+
+        // Kiểm tra và đảm bảo giá trị là số nguyên dương
+        if (isNaN(quantity) || quantity <= 0) {
+            quantity = 1; // Nếu giá trị không hợp lệ, mặc định về 1
+            quantityInput.value = quantity; // Cập nhật lại giá trị
+        }
+
+        const row = quantityInput.closest('tr');
+        const unitPrice = parseFloat(row.querySelector('.product-price .amount').getAttribute('data-amount')); // Đơn giá
+        const rowTotalElement = row.querySelector('.product-subtotal .amount'); // Phần tử chứa tổng giá trị
+
+        // Cập nhật giá trị số lượng
+        quantityInput.value = quantity;
+
+        // Tính toán tổng giá trị (số lượng * đơn giá)
+        const total = quantity * unitPrice;
+
+        // Cập nhật giá trị cho thuộc tính data-amount và nội dung hiển thị
+        rowTotalElement.setAttribute('data-amount', total); // Cập nhật giá trị trong data-amount
+        rowTotalElement.textContent = formatCurrency(total);
+        
+        
+    });
+});
+
+
+// Hàm định dạng số tiền VND
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+}
+</script>

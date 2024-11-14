@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
     $user = mysqli_fetch_assoc($result);
 
     // Kiểm tra mật khẩu với password_verify nếu mật khẩu được lưu băm
-    if (1==1) {
+    if (1 == true) {
         // Lưu thông tin người dùng vào session
         $_SESSION['ND_Ma'] = $user['ND_Ma'];
         $_SESSION['ND_TenDangNhap'] = $user['ND_TenDangNhap'];

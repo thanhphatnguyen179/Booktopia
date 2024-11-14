@@ -76,22 +76,68 @@ if (isset($_POST['selected_books'])) {
                                             <input placeholder="" type="text" value="<?php echo $row_user['ND_SoDT'] ?>">
                                         </div>
                                     </div>
+<hr>
+<div class="col-md-12">
+    <div class="checkout-form-list">
+    <label for="makhuyenmai"><h4>Mã khuyến mãi (Nếu có): </h4></label>
+    <input type="text" name="KM_Ma" id="makhuyenmai" placeholder="Nhập mã khuyến mãi">
+    </div>
+   
+</div>
+
+
+
+
                                     <hr>
 <div class="col-md-12">
 <div class="sp-content">
     <h4>Giao hàng đến địa chỉ</h4>
 
+<?php 
+    $sql_query_default_address = "
+        SELECT 
+            d.DC_Ma,
+            d.DC_SoNha, 
+            t.TTP_Ten, 
+            q.QH_Ten, 
+            x.XPTT_Ten,
+            t.TTP_DonGia
+        FROM 
+            diachi d
+        INNER JOIN tinh_thanhpho t ON d.TTP_Ma = t.TTP_Ma
+        INNER JOIN quanhuyen q ON d.QH_Ma = q.QH_Ma
+        INNER JOIN xa_phuong_thitran x ON d.XPTT_Ma = x.XPTT_Ma
+        WHERE 
+            d.ND_Ma = '$ND_Ma' AND d.DC_MacDinh = 1
+    ";
+
+    // Thực thi câu truy vấn
+    $result_query_default_address = mysqli_query($connection, $sql_query_default_address);
+
+    $DC_Ma = "";
+    $DC_HienThiChiTiet = "";
+    $DC_DonGia = 0;
+    // Kiểm tra kết quả
+    if (mysqli_num_rows($result_query_default_address) > 0) {
+        // Nếu có địa chỉ mặc định, lấy thông tin địa chỉ
+        $address = mysqli_fetch_assoc($result_query_default_address);
+        $DC_Ma = $address['DC_Ma'];
+        $DC_DonGia = $address['TTP_DonGia'];
+        $DC_HienThiChiTiet = $address['DC_SoNha'] . ", " . $address['XPTT_Ten'] . ", " . $address['QH_Ten'] . ", " . $address['TTP_Ten'];  
+    } 
+
+?>    
     <!-- Radio buttons -->
     <div class="form-check">
         <input class="form-check-input" type="radio" name="addressOption" id="addressOption1" checked>
         <label class="form-check-label" for="addressOption1">
-            Địa chỉ
+            <span id="diachi_macdinh" VC-DonGia="<?php echo $DC_DonGia; ?>">Địa chỉ mặc định: <?php echo $DC_HienThiChiTiet; ?></span>
         </label>
     </div>
     <div class="form-check">
         <input class="form-check-input" type="radio" name="addressOption" id="addressOption2">
         <label class="form-check-label" for="addressOption2">
-            Chọn địa chỉ giao hàng
+            Chọn địa chỉ giao hàng khác
         </label>
     </div>
 
@@ -137,10 +183,6 @@ if (isset($_POST['selected_books'])) {
                 </tr>
             </tbody>
         </table>
-
-        <div class="mt-3">
-            <h3>Chi phí vận chuyển: <span id="shippingCost" style="color:red;"></span></h3> 
-        </div>
         
     </div>
 </div>
@@ -158,12 +200,14 @@ if (isset($_POST['selected_books'])) {
                     <div class="col-lg-6 col-12">
                         <div class="your-order">
                             <h3>Đơn hàng</h3>
-                            <div class="your-order-table table-responsive">
+                            <div class="your-order-table table-responsive"> 
+
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th class="cart-product-name">Sản phẩm</th>
-                                            <th class="cart-product-total">Tổng cộng</th>
+                                            <th><strong>Ảnh</strong></th>
+                                            <th class="cart-product-name"><strong>Sách x Số lượng</strong></th>
+                                            <th class="cart-product-total" style="text-align: right;"><strong>Đơn giá</strong></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -173,11 +217,11 @@ if (isset($_POST['selected_books'])) {
     
     foreach($List_Book_ID as $S_Ma) {
 
-        echo $S_Ma;
-
+        
         $sql_cart = "
             SELECT
                 s.S_Ten,
+                s.S_HinhAnh,
                 gh.GH_SoLuong,
                 gny.GNY_DonGia
             FROM
@@ -201,85 +245,131 @@ if (isset($_POST['selected_books'])) {
 
 ?>                                        
 <?php 
+    $tong_hoa_don = 0;
     foreach($mini_book_lists as $list) { ?>
 
                               
                                         <tr class="cart_item">
+                                            <td><img width="100px" src="<?php echo $list['S_HinhAnh'] ?>" alt=""></td>
                                             <td class="cart-product-name"><?php echo $list['S_Ten'] ?><strong class="product-quantity">
                                             × <?php echo $list['GH_SoLuong'] ?></strong></td>
-                                            <td class="cart-product-total"><span class="amount"><?php echo $list['GNY_DonGia'] ?></span></td>
-                                        </tr>     
-<?php    } ?>                             
+                                            <td class="cart-product-total" style="text-align: right;"><span class="amount formatMoney" data-amount="<?php echo $list['GNY_DonGia']; ?>"></span></td>
+                                        </tr>  
+                                        <?php $tong_hoa_don += $list['GH_SoLuong'] * $list['GNY_DonGia']; ?>
+<?php    } ?> 
                                     </tbody>
                                     <tfoot>
                                         <tr class="cart-subtotal">
-                                            <th>Cart Subtotal</th>
-                                            <td><span class="amount">£215.00</span></td>
+                                            <th colspan="2">Tổng tiền giỏ hàng: </th>
+                                            <td style="text-align: right;"><span id="TongTienGioHang" class="amount formatMoney" data-amount="<?php echo $tong_hoa_don; ?>"></span></td>
+                                        </tr>
+                                        
+                                        <tr class="cart-subtotal">
+                                            <th colspan="2">Chi phí vận chuyển</th>
+                                            <td style="text-align: right;"><span id="shippingCost" class="amount formatMoney" data-amount="<?php echo $DC_DonGia; ?>"></span></td>
+                                        </tr>
+                                        <tr class="cart-subtotal">
+                                            <th colspan="2">Giảm giá: </th>
+                                            <td style="text-align: right;"> <span id="DiscountCost" class="amount formatMoney" data-amount="0"></span></span></td>
                                         </tr>
                                         <tr class="order-total">
-                                            <th>Order Total</th>
-                                            <td><strong><span class="amount">£215.00</span></strong></td>
+                                            <th colspan="2">Tổng tiền: </th>
+                                            <td style="text-align: right;"><strong><span id="TongTien" class="amount formatMoney" data-amount="0"></span></strong></td>
                                         </tr>
                                     </tfoot>
                                 </table>
                             </div>
+                            <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Hàm định dạng tiền VND
+        function formatMoney(amount) {
+            return new Intl.NumberFormat('vi-VN', { 
+                style: 'currency', 
+                currency: 'VND' 
+            }).format(amount);
+        }
+
+        // Hàm tính tổng tiền và cập nhật hiển thị
+        function calculateTotal() {
+            const cartTotal = parseFloat(document.getElementById('TongTienGioHang').getAttribute('data-amount')) || 0;
+            const shippingCost = parseFloat(document.getElementById('shippingCost').getAttribute('data-amount')) || 0;
+            const discountCost = parseFloat(document.getElementById('DiscountCost').getAttribute('data-amount')) || 0;
+
+            // Tính tổng tiền
+            const total = cartTotal + shippingCost - discountCost;
+
+            // Hiển thị tổng tiền đã định dạng
+            const totalElement = document.getElementById('TongTien');
+            totalElement.setAttribute('data-amount', total);
+            totalElement.textContent = formatMoney(total);
+        }
+
+        // Định dạng và hiển thị giá trị ban đầu cho các mục
+        function formatInitialValues() {
+            const elements = document.querySelectorAll('.formatMoney');
+            elements.forEach(function (element) {
+                const amount = parseFloat(element.getAttribute('data-amount')) || 0;
+                element.textContent = formatMoney(amount);
+            });
+        }
+
+        // Gọi hàm định dạng các giá trị ban đầu và tính tổng khi trang được tải
+        formatInitialValues();
+        calculateTotal();
+
+        // Sử dụng MutationObserver để theo dõi sự thay đổi của thuộc tính data-amount của shippingCost
+        const shippingCostElement = document.getElementById('shippingCost');
+        const observer = new MutationObserver(function (mutationsList) {
+            for (let mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-amount') {
+                    calculateTotal();
+                    shippingCostElement.textContent = formatMoney(parseFloat(shippingCostElement.getAttribute('data-amount')) || 0);
+                }
+            }
+        });
+
+        // Khởi tạo MutationObserver cho thuộc tính của phần tử shippingCost
+        observer.observe(shippingCostElement, { attributes: true });
+    });
+</script>
+
+                           
                             <div class="payment-method">
                                 <div class="payment-accordion">
                                     <div id="accordion">
+<?php 
+
+    $sql_hinhthucthanhtoan = "SELECT `HTTT_Ma`, `HTTT_Ten`, `HTTT_MoTa`, `HTTT_TrangThai`, `HTTT_Logo` FROM `hinhthucthanhtoan` WHERE HTTT_TrangThai = 1";
+    $result_hinhthucthanhtoan = mysqli_query($connection, $sql_hinhthucthanhtoan);
+?>
+
+<?php while($row_hinhthucthanhtoan = mysqli_fetch_array($result_hinhthucthanhtoan) ) { ?>
                                         <div class="card">
                                             <div class="card-header" id="#payment-1">
                                                 <h5 class="panel-title">
-                                                    <a href="javascript:void(0)" class="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                        Direct Bank Transfer.
+                                                <?php 
+                                                $isCOD = "";
+                                                if($row_hinhthucthanhtoan['HTTT_Ten'] == "COD") 
+                                                    $isCOD = "checked";
+                                                ?>
+                                                <input type="radio" class="form-check-input" id="paymentOption1" name="payment" <?php echo $isCOD ?>>
+
+                                                    <a href="javascript:void(0)" class="" data-toggle="collapse" data-target="#<?php echo $row_hinhthucthanhtoan['HTTT_Ma'];?>" aria-expanded="true" aria-controls="collapseOne">
+                                                        <?php echo $row_hinhthucthanhtoan['HTTT_Ten'] ?>
                                                     </a>
                                                 </h5>
                                             </div>
-                                            <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                                            <div id="<?php echo $row_hinhthucthanhtoan['HTTT_Ma'];?>" class="collapse show" data-parent="#accordion">
                                                 <div class="card-body">
-                                                    <p>Make your payment directly into our bank account. Please use your Order
-                                                        ID as the payment
-                                                        reference. Your order won’t be shipped until the funds have cleared in
-                                                        our account.</p>
+                                                    <p><?php echo $row_hinhthucthanhtoan['HTTT_MoTa'];?></p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card">
-                                            <div class="card-header" id="#payment-2">
-                                                <h5 class="panel-title">
-                                                    <a href="javascript:void(0)" class="collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                                        Cheque Payment
-                                                    </a>
-                                                </h5>
-                                            </div>
-                                            <div id="collapseTwo" class="collapse" data-parent="#accordion">
-                                                <div class="card-body">
-                                                    <p>Make your payment directly into our bank account. Please use your Order
-                                                        ID as the payment
-                                                        reference. Your order won’t be shipped until the funds have cleared in
-                                                        our account.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card">
-                                            <div class="card-header" id="#payment-3">
-                                                <h5 class="panel-title">
-                                                    <a href="javascript:void(0)" class="collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                        PayPal
-                                                    </a>
-                                                </h5>
-                                            </div>
-                                            <div id="collapseThree" class="collapse" data-parent="#accordion">
-                                                <div class="card-body">
-                                                    <p>Make your payment directly into our bank account. Please use your Order
-                                                        ID as the payment
-                                                        reference. Your order won’t be shipped until the funds have cleared in
-                                                        our account.</p>
-                                                </div>
-                                            </div>
-                                        </div>
+<?php } ?>
+                                        
                                     </div>
                                     <div class="order-button-payment">
-                                        <input value="Place order" type="submit">
+                                        <input value="Đặt hàng" type="submit">
                                     </div>
                                 </div>
                             </div>
@@ -322,13 +412,32 @@ if (isset($_POST['selected_books'])) {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    $(document).ready(function() {
+    // Hàm định dạng tiền VND
+function formatMoney(element) {
+    const amount = parseFloat(element.getAttribute('data-amount'));
+    
+    // Kiểm tra nếu amount hợp lệ
+    if (!isNaN(amount)) {
+        const formattedAmount = new Intl.NumberFormat('vi-VN', { 
+            style: 'currency', 
+            currency: 'VND' 
+        }).format(amount);
+        
+        // Cập nhật nội dung đã định dạng
+        element.textContent = formattedAmount;
+    }
+}
+$(document).ready(function() {
     // Khi radio "Chọn địa chỉ giao hàng" được chọn, hiển thị bảng địa chỉ
     $('input[name="addressOption"]').change(function() {
         if ($('#addressOption2').is(':checked')) {
             $('#addressSelection').show();
+            $('#province').attr('data-amount', 0).trigger('change');
         } else {
             $('#addressSelection').hide();
+            var dongia = $('#diachi_macdinh').attr('vc-dongia');
+            $('#shippingCost').attr('data-amount', dongia) ;
+            
         }
     });
 
@@ -357,9 +466,16 @@ if (isset($_POST['selected_books'])) {
                 success: function(response) {
                     const data = JSON.parse(response);
                     // Hiển thị chi phí vận chuyển
-                    $('#shippingCost').text(data.shippingCost + ' VND');
+                    $('#shippingCost')
+                        .addClass('formatMoney')
+                        .attr('data-amount', data.shippingCost)
+                        .each(function() {
+                            formatMoney(this); // Gọi hàm định dạng cho phần tử sau khi gán giá trị
+                        });
+
                 }
             });
+            
 
             // Gọi AJAX để lấy quận/huyện mới
             $.ajax({
@@ -401,6 +517,56 @@ if (isset($_POST['selected_books'])) {
         } else {
             // Nếu không có quận, reset lại phường/xã/ thị trấn
             $('#ward').html('<option value="" selected disabled>Chọn Phường/Xã/Thị trấn</option>');
+        }
+    });
+});
+
+</script>   
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // Lấy tất cả các phần tử có class 'formatMoney'
+    const elements = document.querySelectorAll('.formatMoney');
+
+    // Hàm định dạng tiền VND
+    function formatMoney() {
+        elements.forEach(function (element) {
+            // Lấy giá trị từ data-amount (nếu có) hoặc giá trị hiện tại
+            const amount = parseFloat(element.getAttribute('data-amount'));
+            
+            // Kiểm tra nếu amount hợp lệ
+            if (!isNaN(amount)) {
+                const formattedAmount = new Intl.NumberFormat('vi-VN', { 
+                    style: 'currency', 
+                    currency: 'VND' 
+                }).format(amount);
+
+                // Hiển thị giá trị đã định dạng
+                if (element.tagName === 'INPUT') {
+                    element.value = formattedAmount;
+                } else {
+                    element.textContent = formattedAmount;
+                }
+            }
+        });
+    }
+
+    // Gọi hàm formatMoney khi trang tải xong
+    formatMoney();
+
+    // Đăng ký sự kiện cho các phần tử input có class 'formatMoney'
+    elements.forEach(function (element) {
+        if (element.tagName === 'INPUT') {
+            // Sự kiện input để cập nhật dữ liệu khi người dùng nhập
+            element.addEventListener('input', function () {
+                const rawValue = element.value.replace(/[^\d.-]/g, ''); // Loại bỏ ký tự không phải số
+                element.setAttribute('data-amount', rawValue);
+            });
+
+            // Sự kiện blur và change để áp dụng định dạng khi người dùng kết thúc nhập liệu
+            element.addEventListener('blur', formatMoney);
+            element.addEventListener('change', formatMoney);
         }
     });
 });

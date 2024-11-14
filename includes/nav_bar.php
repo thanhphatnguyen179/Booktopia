@@ -3,6 +3,8 @@
 
 
 
+
+
 <div class="header-middle_area d-none d-lg-block">
     <div class="container">
         <div class="row">
@@ -193,10 +195,19 @@
 
 
                         <li>
+<?php 
+    if (!isset($_SESSION['ND_Ma'])) {
+        echo "<a href='login.php' >";
+        echo "<i class='ion-android-person'></i>
+                            </a>";
+    } else {
+        echo "<a href='dashboard.php' >";
+        echo "<i class='ion-android-person'></i>
+                            </a>";
+    }
+?>                            
                             
-                            <a href="login.php" >
-                                <i class="ion-android-person"></i>
-                            </a>
+                                
                         </li>
 
 

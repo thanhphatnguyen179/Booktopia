@@ -4,6 +4,7 @@
 
 
 
+
 <?php include('includes/db.php'); ?>
 <?php include('includes/header.php'); ?>
 
@@ -14,6 +15,43 @@
 <!-- Begin Hiraola's Header Main Area -->
 <?php include('includes/nav_bar.php'); ?>
 <!-- Hiraola's Header Main Area End Here -->
+<?php 
+if (isset($_SESSION['alert'])) {
+    $alert = $_SESSION['alert'];
+    echo "
+    <script>
+        Swal.fire({
+            icon: '" . $alert['type'] . "',
+            title: '" . $alert['message'] . "',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    </script>
+    ";
+    unset($_SESSION['alert']);
+}
+
+
+?>
+
+<?php 
+if (!isset($_SESSION['ND_Ma'])) {
+    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+    echo "<script>
+        Swal.fire({
+            title: 'Thông báo',
+            text: 'Quý khách chưa đăng nhập!',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/booktopia/index.php';
+            }
+        });
+    </script>";
+    exit();
+} ?>
+
 
 
         <main class="page-content">
@@ -44,15 +82,54 @@
                             <div class="tab-content myaccount-tab-content" id="account-page-tab-content">
                                 <div class="tab-pane fade show active" id="account-dashboard" role="tabpanel" aria-labelledby="account-dashboard-tab">
                                     <div class="myaccount-dashboard">
-                                        <?php 
-                                            echo $_SESSION['ND_Ma'];
-                                            echo $_SESSION['ND_TenDangNhap'];
-                                            echo $_SESSION['ND_HoTen'];
-                                            echo $_SESSION['ND_SoDT'] ;
-                                            echo $_SESSION['ND_Email'];
-                                            echo $_SESSION['ND_HinhAnh'];
+                                        
+                                    <div class="container mt-4">
+    <h3 class="text-center">Thông tin cá nhân</h3>
+    
+    <div class="row">
+        <!-- Hình ảnh -->
+        <div class="col-md-4 text-center">
+            <div class="mb-3">
+<?php 
+    $path_img = $_SESSION['ND_HinhAnh'];
+    if (empty($path_img)) {
+        $path_img = "./assets/images/no_image.jpg";
+    }
+?>                
+                <img src="<?php echo $path_img; ?>" alt="Ảnh đại diện" class="img-fluid rounded-circle border border-secondary" style="width: 150px; height: 150px;">
+            </div>
+        </div>
+        
+        <!-- Thông tin cá nhân -->
+        <div class="col-md-8">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Mã người dùng: </label>
+                <span><?php echo htmlspecialchars($_SESSION['ND_Ma']); ?></span>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label fw-bold">Tên đăng nhập: </label>
+                <span><?php echo htmlspecialchars($_SESSION['ND_TenDangNhap']); ?></span>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label fw-bold">Họ và tên: </label>
+                <span><?php echo htmlspecialchars($_SESSION['ND_HoTen']); ?></span>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label fw-bold">Số điện thoại: </label>
+                <span><?php echo htmlspecialchars($_SESSION['ND_SoDT']); ?></span>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label fw-bold">Email: </label>
+                <span><?php echo htmlspecialchars($_SESSION['ND_Email']); ?></span>
+            </div>
+        </div>
+    </div>
+</div>
 
-                                        ?>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="account-orders" role="tabpanel" aria-labelledby="account-orders-tab">
@@ -91,23 +168,79 @@
                                 </div>
                                 <div class="tab-pane fade" id="account-address" role="tabpanel" aria-labelledby="account-address-tab">
                                     <div class="myaccount-address">
-                                        <p>The following addresses will be used on the checkout page by default.</p>
-                                        <div class="row">
-                                            <div class="col">
-                                                <h4 class="small-title">BILLING ADDRESS</h4>
-                                                <address>
-                                                    1234 Heaven Stress, Beverly Hill OldYork UnitedState of Lorem
-                                                </address>
-                                            </div>
-                                            <div class="col">
-                                                <h4 class="small-title">SHIPPING ADDRESS</h4>
-                                                <address>
-                                                    1234 Heaven Stress, Beverly Hill OldYork UnitedState of Lorem
-                                                </address>
-                                            </div>
-                                        </div>
+
+<?php 
+    
+    $ND_Ma = $_SESSION['ND_Ma'];
+    $sql_address = "SELECT * FROM `diachi` WHERE DC_MacDinh = 1 AND ND_Ma = '$ND_Ma'";
+    $result_address = mysqli_query($connection, $sql_address);
+
+    // Khởi tạo biến để lưu thông tin địa chỉ mặc định nếu có
+    $DC_Ma = "";
+    $TTP_Ma = "";
+    $QH_Ma = "";
+    $XPTT_Ma = "";
+    $DC_SoNha = "";
+    $DC_MacDinh = "";
+
+    if ($row_address = mysqli_fetch_array($result_address)) {
+        // Gán các biến với giá trị từ kết quả truy vấn nếu có địa chỉ mặc định
+        $DC_Ma = $row_address['DC_Ma'];
+        $TTP_Ma = $row_address['TTP_Ma'];
+        $QH_Ma = $row_address['QH_Ma'];
+        $XPTT_Ma = $row_address['XPTT_Ma'];
+        $DC_SoNha = $row_address['DC_SoNha'];
+    }
+?>
+
+<!-- Form Cập nhật địa chỉ -->
+<form action="./includes/personal/insert_update_addresss.php" method="POST">
+    <div class="mt-3">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tỉnh/Thành phố</th>
+                    <th>Quận/Huyện</th>
+                    <th>Phường/Xã/Thị trấn</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <select class="form-control" id="province" name="TTP_Ma">
+                            <option value='' selected disabled>Chọn Tỉnh/Thành phố</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-control" id="district" name="QH_Ma">
+                            <option value='' selected disabled>Chọn Quận/Huyện</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-control" id="ward" name="XPTT_Ma">
+                            <option value='' selected  disabled>Chọn Phường/Xã/Thị trấn</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <label for="houseNumber">Số nhà</label>
+                        <input name="DC_SoNha" type="text" id="houseNumber" class="form-control" value="<?= $DC_SoNha ?>" placeholder="Nhập số nhà">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="mt-3">
+            <h3>Chi phí vận chuyển: <span id="shippingCost" style="color:red;">0 VND</span></h3>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block mt-4" style="background-color: #cda557; border-color: #cda557;">Cập nhật thông tin</button>
+    </div>
+</form>
+
                                     </div>
                                 </div>
+
                                 <div class="tab-pane fade" id="account-details" role="tabpanel" aria-labelledby="account-details-tab">
                                     <div class="myaccount-details">
                                         <form action="#" class="hiraola-form">
@@ -328,3 +461,106 @@
 <?php include('includes/footer.php'); ?>
 
 <?php ob_end_flush(); ?>
+
+
+<script>
+    $(document).ready(function() {
+    // Biến để giữ giá trị mặc định
+    const defaultProvince = "<?= $TTP_Ma ?>";
+    const defaultDistrict = "<?= $QH_Ma ?>";
+    const defaultWard = "<?= $XPTT_Ma ?>";
+
+    // Lấy các tỉnh/thành phố khi trang được tải
+    $.ajax({
+        url: './includes/functions/get_provinces.php',
+        method: 'GET',
+        success: function(response) {
+            const provinces = JSON.parse(response);
+            $('#province').html('<option value="">Chọn Tỉnh/Thành phố</option>');
+            provinces.forEach(function(province) {
+                const selected = province.TTP_Ma === defaultProvince ? 'selected' : '';
+                $('#province').append(`<option value="${province.TTP_Ma}" ${selected}>${province.TTP_Ten}</option>`);
+            });
+
+            // Nếu có giá trị tỉnh mặc định, tự động tải quận/huyện
+            if (defaultProvince) {
+                loadDistricts(defaultProvince, defaultDistrict);
+                loadShippingCost(defaultProvince);
+            }
+        }
+    });
+
+    // Tải quận/huyện khi chọn tỉnh/thành phố
+    $('#province').change(function() {
+        const provinceId = $(this).val();
+        loadDistricts(provinceId);
+        loadShippingCost(provinceId);
+    });
+
+    // Tải phường/xã khi chọn quận/huyện
+    $('#district').change(function() {
+        const districtId = $(this).val();
+        loadWards(districtId);
+    });
+
+    // Hàm tải quận/huyện
+    function loadDistricts(provinceId, selectedDistrict = "") {
+        if (provinceId) {
+            $.ajax({
+                url: './includes/functions/get_districts.php',
+                method: 'GET',
+                data: { provinceId: provinceId },
+                success: function(response) {
+                    const districts = JSON.parse(response);
+                    $('#district').html('<option value="">Chọn Quận/Huyện</option>');
+                    districts.forEach(function(district) {
+                        const selected = district.QH_Ma === selectedDistrict ? 'selected' : '';
+                        $('#district').append(`<option value="${district.QH_Ma}" ${selected}>${district.QH_Ten}</option>`);
+                    });
+                    // Nếu có giá trị quận mặc định, tải phường/xã
+                    if (selectedDistrict) {
+                        loadWards(selectedDistrict, defaultWard);
+                    }
+                }
+            });
+        }
+    }
+
+    // Hàm tải phường/xã
+    function loadWards(districtId, selectedWard = "") {
+        if (districtId) {
+            $.ajax({
+                url: './includes/functions/get_wards.php',
+                method: 'GET',
+                data: { districtId: districtId },
+                success: function(response) {
+                    const wards = JSON.parse(response);
+                    $('#ward').html('<option value="">Chọn Phường/Xã/Thị trấn</option>');
+                    wards.forEach(function(ward) {
+                        const selected = ward.XPTT_Ma === selectedWard ? 'selected' : '';
+                        $('#ward').append(`<option value="${ward.XPTT_Ma}" ${selected}>${ward.XPTT_Ten}</option>`);
+                    });
+                }
+            });
+        }
+    }
+
+    // Hàm tải chi phí vận chuyển
+    function loadShippingCost(provinceId) {
+        if (provinceId) {
+            $.ajax({
+                url: './includes/functions/get_shipping_cost.php',
+                method: 'GET',
+                data: { provinceId: provinceId },
+                success: function(response) {
+                    const data = JSON.parse(response);
+                    $('#shippingCost').text(data.shippingCost + ' VND');
+                }
+            });
+        } else {
+            $('#shippingCost').text('0 VND');
+        }
+    }
+});
+
+</script>

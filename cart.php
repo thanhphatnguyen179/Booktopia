@@ -93,7 +93,7 @@ $S_Ten = $row_sach['S_Ten']; // Tên sách
 $S_HinhAnh = $row_sach['S_HinhAnh']; // Hình ảnh sách
 
 
-$sql_giasach = "SELECT MAX(`GNY_NgayHieuLuc`),  `GNY_DonGia` FROM `gianiemyet` WHERE S_Ma = '$S_Ma' ";
+$sql_giasach = "SELECT  `GNY_DonGia` FROM `gianiemyet` WHERE S_Ma = '$S_Ma' ORDER BY GNY_NgayHieuLuc DESC";
 $result_dongia = mysqli_query($connection, $sql_giasach);
 $row_dongia = mysqli_fetch_array($result_dongia);
 

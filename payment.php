@@ -15,6 +15,8 @@
 // Kiểm tra xem có dữ liệu 'selected_books' từ form hay không
 if (isset($_POST['selected_books'])) {
     $List_Book_ID = [];
+    $List_Book_Quanlity = [];
+    $List_Book_Price = [];
     $ND_Ma = $_SESSION['ND_Ma'];
     // Lặp qua các mã sách đã chọn và lưu vào mảng S_Ma
     foreach ($_POST['selected_books'] as $bookId) {
@@ -59,7 +61,7 @@ if (isset($_POST['selected_books'])) {
                                     <div class="col-md-12">
                                         <div class="checkout-form-list">
                                             <label><h5>Họ và tên người nhận<span class="required">*</span></h5></label>
-                                            <input placeholder="" type="text" value="<?php echo $row_user['ND_HoTen'] ?>">
+                                            <input placeholder="" type="text" id="checkout_KH_HoTen" value="<?php echo $row_user['ND_HoTen'] ?>">
                                         </div>
                                     </div>
                                     
@@ -67,20 +69,20 @@ if (isset($_POST['selected_books'])) {
                                     <div class="col-md-12">
                                         <div class="checkout-form-list">
                                             <label><h5>Email<span class="required">*</span></h5></label>
-                                            <input placeholder="" type="email" value="<?php echo $row_user['ND_Email'] ?>">
+                                            <input placeholder="" type="email" id="checkout_KH_Email" value="<?php echo $row_user['ND_Email'] ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="checkout-form-list">
                                             <label><h5>Số điện thoại<span class="required">*</span></h5></label>
-                                            <input placeholder="" type="text" value="<?php echo $row_user['ND_SoDT'] ?>">
+                                            <input placeholder=""  id="checkout_KH_SoDienThoai"  type="text" value="<?php echo $row_user['ND_SoDT'] ?>">
                                         </div>
                                     </div>
 <hr>
 <div class="col-md-12">
     <div class="checkout-form-list">
-    <label for="makhuyenmai"><h4>Mã khuyến mãi (Nếu có): </h4></label>
-    <input type="text" name="KM_Ma" id="makhuyenmai" placeholder="Nhập mã khuyến mãi">
+    <label for="checkout_KM_Ma"><h4>Mã khuyến mãi (Nếu có): </h4></label>
+    <input type="text" name="KM_Ma" id="checkout_KM_Ma" placeholder="Nhập mã khuyến mãi">
     </div>
    
 </div>
@@ -131,9 +133,10 @@ if (isset($_POST['selected_books'])) {
     <div class="form-check">
         <input class="form-check-input" type="radio" name="addressOption" id="addressOption1" checked>
         <label class="form-check-label" for="addressOption1">
-            <span id="diachi_macdinh" VC-DonGia="<?php echo $DC_DonGia; ?>">Địa chỉ mặc định: <?php echo $DC_HienThiChiTiet; ?></span>
+            <span id="diachi_macdinh" DC_Ma="<?php echo $DC_Ma; ?>" VC-DonGia="<?php echo $DC_DonGia; ?>">Địa chỉ mặc định: <?php echo $DC_HienThiChiTiet; ?></span>
         </label>
     </div>
+    
     <div class="form-check">
         <input class="form-check-input" type="radio" name="addressOption" id="addressOption2">
         <label class="form-check-label" for="addressOption2">
@@ -241,6 +244,8 @@ if (isset($_POST['selected_books'])) {
         $row_cart = mysqli_fetch_array($result_cart);
         $mini_book_lists[] = $row_cart;
 
+        $List_Book_Quanlity[] = $row_cart['GH_SoLuong'];
+        $List_Book_Price[] =   $row_cart['GNY_DonGia'];
     }
 
 ?>                                        
@@ -352,25 +357,128 @@ if (isset($_POST['selected_books'])) {
                                                 if($row_hinhthucthanhtoan['HTTT_Ten'] == "COD") 
                                                     $isCOD = "checked";
                                                 ?>
-                                                <input type="radio" class="form-check-input" id="paymentOption1" name="payment" <?php echo $isCOD ?>>
-
-                                                    <a href="javascript:void(0)" class="" data-toggle="collapse" data-target="#<?php echo $row_hinhthucthanhtoan['HTTT_Ma'];?>" aria-expanded="true" aria-controls="collapseOne">
+                                                <input id="<?php if($isCOD == "checked")  echo "HTTT_Checked"; ?>" name="payment" httt-ma="<?php echo $row_hinhthucthanhtoan['HTTT_Ma']; ?>" type="radio" class="form-check-input payment-option" <?php echo $isCOD ?>>
+    <img width="50px" src="<?php echo $row_hinhthucthanhtoan['HTTT_Logo'] ?>" alt="">
+                                                    <a href="javascript:void(0)" class=""  data-target="#<?php echo $row_hinhthucthanhtoan['HTTT_Ma'];?>" aria-expanded="true" aria-controls="collapseOne">
                                                         <?php echo $row_hinhthucthanhtoan['HTTT_Ten'] ?>
                                                     </a>
                                                 </h5>
                                             </div>
-                                            <div id="<?php echo $row_hinhthucthanhtoan['HTTT_Ma'];?>" class="collapse show" data-parent="#accordion">
+                                            <div id="<?php echo $row_hinhthucthanhtoan['HTTT_Ma'];?>"  data-parent="#accordion">
                                                 <div class="card-body">
                                                     <p><?php echo $row_hinhthucthanhtoan['HTTT_MoTa'];?></p>
                                                 </div>
                                             </div>
                                         </div>
 <?php } ?>
+
+<script>
+// Lắng nghe sự kiện thay đổi trên các radio buttons có class 'payment-option'
+document.querySelectorAll('.payment-option').forEach(option => {
+    option.addEventListener('change', function() {
+        // Loại bỏ class HTTT_Checked khỏi tất cả các phần tử chứa radio button
+        document.querySelectorAll('.payment-option').forEach(item => {
+            item.setAttribute('id', '');
+        });
+
+        // Nếu radio button này được chọn, thêm class HTTT_Checked vào phần tử chứa radio button
+        if (this.checked) {
+            this.setAttribute('id', 'HTTT_Checked'); // Thêm class vào phần tử chứa radio button
+        }
+    });
+});
+
+
+</script>
                                         
                                     </div>
-                                    <div class="order-button-payment">
-                                        <input value="Đặt hàng" type="submit">
-                                    </div>
+
+                                    <form action="./includes/invoice/check_payment.php" method="post" id="checkoutForm">
+
+<input type="hidden" name="KH_Ma" id="final_payment_KH_Ma" value="<?php echo $ND_Ma; ?>">
+<input type="hidden" name="KH_Email" id="final_payment_KH_Email">
+<input type="hidden" name="KH_SoDienThoai" id="final_payment_KH_SoDienThoai">
+<input type="hidden" name="isDC_MacDinh" id="final_payment_DC_MacDinh">
+<input type="hidden" name="DC_Ma" id="final_payment_DC_Ma">
+<input type="hidden" name="TTP_Ma" id="final_payment_TTP_Ma">
+<input type="hidden" name="QH_Ma" id="final_payment_QH_Ma">
+<input type="hidden" name="XPTT_Ma" id="final_payment_XPTT_Ma">
+<input type="hidden" name="DC_SoNha" id="final_payment_DC_SoNha">
+<input type="hidden" name="DC_SoTienVanChuyen" id="final_payment_DC_SoTienVanChuyen">
+<input type="hidden" name="KM_Ma" id="final_payment_KM_Ma">
+<input type="hidden" name="KM_TongSoTien" id="final_payment_KM_TongSoTien">
+
+
+
+<input type="hidden" name="submit_HTTT_Ma" id="final_payment_submit_HTTT_Ma">
+
+<!-- Danh sách sách -->
+<!-- Danh sách sách -->
+<?php foreach ($List_Book_ID as $S_Ma): ?>
+    <input type="hidden" name="LIST_BOOK[]" value="<?php echo $S_Ma; ?>">
+<?php endforeach; ?>
+
+<?php foreach ($List_Book_Quanlity as $S_SoLuong): ?>
+    <input type="hidden" name="List_Book_Quanlity[]" value="<?php echo $S_SoLuong; ?>">
+<?php endforeach; ?>
+
+<?php foreach ($List_Book_Price as $S_Price): ?>
+    <input type="hidden" name="List_Book_Price[]" value="<?php echo $S_Price; ?>">
+<?php endforeach; ?>
+
+<div class="order-button-payment">
+    <input value="Đặt hàng" type="submit">
+</div>
+</form>
+
+<script>
+document.getElementById("checkoutForm").addEventListener("submit", function(event) {
+// Lấy dữ liệu từ các element và nạp vào các input hidden
+
+document.getElementById("final_payment_KH_Email").value = document.getElementById("checkout_KH_Email").value;
+document.getElementById("final_payment_KH_SoDienThoai").value = document.getElementById("checkout_KH_SoDienThoai").value;
+document.getElementById("final_payment_KM_Ma").value = document.getElementById("checkout_KM_Ma").value;
+
+// Kiểm tra isDC_MacDinh
+const diaChiMacDinhElement = document.getElementById("diachi_macdinh");
+
+if (diaChiMacDinhElement && diaChiMacDinhElement.getAttribute("DC_Ma")) {
+    document.getElementById("final_payment_DC_MacDinh").value = "1";
+    document.getElementById("final_payment_DC_Ma").value = diaChiMacDinhElement.getAttribute("DC_Ma");
+} else {
+    document.getElementById("final_payment_DC_MacDinh").value = "0";
+    document.getElementById("final_payment_DC_Ma").value = "";
+};
+
+
+document.getElementById('final_payment_submit_HTTT_Ma').value = document.getElementById("HTTT_Checked").getAttribute("httt-ma");
+
+
+
+// Lấy thông tin địa chỉ
+document.getElementById("final_payment_TTP_Ma").value = document.getElementById("province").value;
+document.getElementById("final_payment_QH_Ma").value = document.getElementById("district").value;
+document.getElementById("final_payment_XPTT_Ma").value = document.getElementById("ward").value; // nếu có
+document.getElementById("final_payment_DC_SoNha").value = document.getElementById("houseNumber").value;
+
+// Chi phí vận chuyển
+document.getElementById("final_payment_DC_SoTienVanChuyen").value = document.getElementById("shippingCost").getAttribute('data-amount');
+
+// Chi phí giảm giá
+document.getElementById("final_payment_KM_TongSoTien").value = document.getElementById("DiscountCost").getAttribute('data-amount');
+
+
+
+
+
+
+
+});
+    </script>
+
+
+
+
                                 </div>
                             </div>
                         </div>
@@ -433,10 +541,12 @@ $(document).ready(function() {
         if ($('#addressOption2').is(':checked')) {
             $('#addressSelection').show();
             $('#province').attr('data-amount', 0).trigger('change');
+            $('#diachi_macdinh').attr('dc_ma', '');
         } else {
             $('#addressSelection').hide();
             var dongia = $('#diachi_macdinh').attr('vc-dongia');
             $('#shippingCost').attr('data-amount', dongia) ;
+            $('#diachi_macdinh').attr('dc_ma', '<?php echo $DC_Ma; ?>');
             
         }
     });

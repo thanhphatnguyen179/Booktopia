@@ -62,19 +62,19 @@ if (!isset($_SESSION['ND_Ma'])) {
                         <div class="col-lg-3">
                             <ul class="nav myaccount-tab-trigger" id="account-page-tab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="account-dashboard-tab" data-toggle="tab" href="#account-dashboard" role="tab" aria-controls="account-dashboard" aria-selected="true">Dashboard</a>
+                                    <a class="nav-link active" id="account-dashboard-tab" data-toggle="tab" href="#account-dashboard" role="tab" aria-controls="account-dashboard" aria-selected="true">Bảng điều khiển</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="account-orders-tab" data-toggle="tab" href="#account-orders" role="tab" aria-controls="account-orders" aria-selected="false">Orders</a>
+                                    <a class="nav-link" id="account-orders-tab" data-toggle="tab" href="#account-orders" role="tab" aria-controls="account-orders" aria-selected="false">Đơn hàng đã mua</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="account-address-tab" data-toggle="tab" href="#account-address" role="tab" aria-controls="account-address" aria-selected="false">Addresses</a>
+                                    <a class="nav-link" id="account-address-tab" data-toggle="tab" href="#account-address" role="tab" aria-controls="account-address" aria-selected="false">Địa chỉ</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="account-details-tab" data-toggle="tab" href="#account-details" role="tab" aria-controls="account-details" aria-selected="false">Account Details</a>
+                                    <a class="nav-link" id="account-details-tab" data-toggle="tab" href="#account-details" role="tab" aria-controls="account-details" aria-selected="false">Thông tin chi tiết</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="account-logout-tab" href="./admin/functions/functions/logout.php" role="tab" aria-selected="false">Logout</a>
+                                    <a class="nav-link" id="account-logout-tab" href="./admin/functions/functions/logout.php" role="tab" aria-selected="false">Đăng xuất</a>
                                 </li>
                             </ul>
                         </div>

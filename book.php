@@ -139,12 +139,16 @@
 
     <div class="d-flex mt-4">
         <!-- Add to Cart Button -->
-        <button type="button" class="btn btn-outline-primary mr-2 flex-fill" onclick="addToCart()">
+        <button type="button" class="btn btn-outline-primary mr-2 flex-fill" style="color: #cda557; border-color: #cda557;" 
+        onmouseover="this.style.backgroundColor='#f1e0c7'; this.style.color='#5a4a2f';" 
+        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#cda557';"  onclick="addToCart()">
             <i class="fas fa-shopping-cart"></i> Thêm vào giỏ hàng
         </button>
 
         <!-- Buy Now Button -->
-        <button type="button" class="btn btn-primary  flex-fill" onclick="buyNow()">
+        <button type="button" class="btn btn-primary  flex-fill" style="background-color: #cda557; border-color: #cda557; color: #fff;" 
+        onmouseover="this.style.backgroundColor='#b59445';" 
+        onmouseout="this.style.backgroundColor='#cda557';"  onclick="buyNow()">
             <i class="fas fa-bolt"></i> Mua ngay
         </button>
     </div>
@@ -249,10 +253,10 @@
                                 
 
                                 <div class="don_gia_sach">
-                                    <h3><span>Đơn giá: </span><span id="don_gia" class="amount formatMoney" data-amount=<?php echo $S_DonGia; ?> ></span></h3>
+                                    <h3><span>Đơn giá bán: </span><span id="don_gia" class="amount formatMoney" data-amount=<?php echo $S_DonGia; ?> ></span></h3>
                                 </div>
 
-                                
+                                <br>
                                 </form>
 
                                 <div class="tong_tien_tam_tinh">

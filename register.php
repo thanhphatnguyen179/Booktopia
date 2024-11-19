@@ -47,7 +47,7 @@
                                 <h4 class="font-size-18">Đăng ký tài khoản</h4>
                             </div>
 
-<div class="p-2 mt-5">
+<div class="mt-4">
     <form class="form-horizontal" action="register_handler.php" method="POST">
 
         <div class="form-group auth-form-group-custom mb-4">

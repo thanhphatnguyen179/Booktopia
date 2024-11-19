@@ -10,7 +10,7 @@
 
                         <li>
                             <a href="index.php" class="waves-effect">
-                                <i class="ri-dashboard-line"></i><span class="badge badge-pill badge-success float-right">3</span>
+                                <i class="ri-home-4-line"></i><span class="badge badge-pill badge-success float-right">3</span>
                                 <span>Bảng điều khiển</span>
                             </a>
                         </li>
@@ -18,7 +18,7 @@
 
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-store-2-line"></i>
+                                <i class="ri-bookmark-line"></i>
                                 <span>Chủ đề</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
@@ -28,7 +28,7 @@
                         </li>
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-store-2-line"></i>
+                                <i class="ri-building-2-line"></i>
                                 <span>Nhà cung cấp</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
@@ -38,7 +38,7 @@
                         </li>
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-store-2-line"></i>
+                            <i class="ri-pen-nib-line"></i>
                                 <span>Nhà xuất bản</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
@@ -49,7 +49,7 @@
 
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-store-2-line"></i>
+                            <i class="ri-pencil-line"></i>
                                 <span>Tác giả</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
@@ -59,7 +59,7 @@
                         </li>
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-store-2-line"></i>
+                            <i class="ri-archive-line"></i>
                                 <span>Quản lý Kho</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
@@ -70,7 +70,7 @@
                         </li>
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-store-2-line"></i>
+                            <i class="ri-book-open-line"></i>
                                 <span>Quản lý sách</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
@@ -83,7 +83,7 @@
 
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-store-2-line"></i>
+                                <i class="ri-inbox-line"></i>
                                 <span>Quản lý Nhập hàng</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
@@ -95,7 +95,7 @@
 
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-store-2-line"></i>
+                            <i class="ri-file-2-line"></i>
                                 <span>Quản lý Hóa đơn</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">

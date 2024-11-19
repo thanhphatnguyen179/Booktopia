@@ -97,7 +97,9 @@ if (isset($_POST["sach_add"])) {
                             TG_Ma = '$tg_ma', 
                             NXB_Ma = '$nxb_ma', 
                             NCC_Ma = '$ncc_ma', 
-                            CD_Ma = '$cd_ma'
+                            CD_Ma = '$cd_ma',
+                            S_ThoiGianCapNhat = NOW()
+
                           WHERE S_Ma = '$s_ma'";
 
             // Thực hiện truy vấn

@@ -60,6 +60,17 @@
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
                                 <i class="ri-store-2-line"></i>
+                                <span>Quản lý Kho</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="kho_all.php">Danh sách kho</a></li>
+                                
+                                <li><a href="kho_add.php">Thêm kho mới</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="ri-store-2-line"></i>
                                 <span>Quản lý sách</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
@@ -68,6 +79,32 @@
                                 <li><a href="sach_add.php">Thêm sách mới</a></li>
                             </ul>
                         </li>
+                        
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="ri-store-2-line"></i>
+                                <span>Quản lý Nhập hàng</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="nhaphang_all.php">Danh sách phiếu nhập hàng</a></li>
+                                
+                                <li><a href="nhaphang_add.php">Thêm phiếu nhập mới</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="ri-store-2-line"></i>
+                                <span>Quản lý Hóa đơn</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="hoadon_all.php">Danh sách hóa đơn</a></li>
+                                
+                                <li><a href="hoadon_add.php">Quản lý trạng thái hóa đơn</a></li>
+                            </ul>
+                        </li>
+                       
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
                                 <i class="ri-store-2-line"></i>

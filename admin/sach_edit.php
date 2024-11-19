@@ -65,6 +65,8 @@ include('../includes/db.php');
                     $NXB_Ma = $row['NXB_Ma'];
                     $NCC_Ma = $row['NCC_Ma'];
                     $CD_Ma = $row['CD_Ma'];
+                    $S_ThoiGianTao = $row['S_ThoiGianTao'];
+                    $S_ThoiGianCapNhat = $row['S_ThoiGianCapNhat'];
                 
                 
                 $sql_dongia = "SELECT GNY_DonGia FROM gianiemyet WHERE S_Ma = '$S_Ma' ORDER BY GNY_NgayHieuLuc DESC";
@@ -133,7 +135,7 @@ include('../includes/db.php');
                                 </div>
 
                                 <div class="row">
-                                    <div  class="col-md-4">
+                                    <div  class="col-md-6">
                                         <div class="form-group">
                                         <label for="CD_Ma">Chủ đề: </label>
                                         <select id="CD_Ma" name="CD_Ma" required class="form-control custom-select" title="Chủ đề">
@@ -156,7 +158,7 @@ include('../includes/db.php');
                                         </div>
                                     </div>
 
-                                    <div  class="col-md-4">
+                                    <div  class="col-md-6">
                                     <div class="form-group">
                                         <label for="TG_Ma">Tác giả: </label>
                                         <select id="TG_Ma" name="TG_Ma" required class="form-control custom-select" title="Tác giả">
@@ -179,35 +181,13 @@ include('../includes/db.php');
                                         </select>
                                         </div>
                                     </div>
-                                    <div  class="col-md-4">
-                                        <div class="form-group">
-                                        <label for="K_Ma">Lưu vào kho</label>
-                                        <select id="K_Ma" name="K_Ma" required class="form-control custom-select" onchange="showQuantity(this.value)">
-                                             <option value="" disabled selected>Chọn kho lưu trữ</option>
-
-                                                <?php 
-                                                    $query_kho = "SELECT * FROM `kho`";
-                                                    $result_kho = mysqli_query($connection, $query_kho);
-                                                    
-                                                    while ($row = mysqli_fetch_assoc($result_kho)) {
-                                                        $idx = (int) substr($row['K_Ma'], 1);
-                                                        echo "<option value='{$row['K_Ma']}'>$idx - {$row['K_Ten']}</option>";
-                                                    }
-                                                    
-                                                ?>
-                                        </select>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                                 
                                 <div class="row">
-                                <div  class="col-md-4">
-                                        <div class="form-group">
-                                        <label for="s_dongia">Đơn giá: </label>
-                                        <input value="<?php echo $row_donGia['GNY_DonGia']; ?>" class="form-control" min="1000" type="number" name="s_dongia" id="s_dongia" required>
-                                    </div>
-                                    </div>
-                                    <div  class="col-md-4">
+                               
+                                    
+                                    <div  class="col-md-6">
                                         <div class="form-group">
                                         <label for="NCC_Ma">Nhà cung cấp: </label>
                                         <select id="NCC_Ma" name="NCC_Ma" required class="form-control custom-select" title="Nhà cung cấp">
@@ -230,7 +210,7 @@ include('../includes/db.php');
                                         </div>
                                     </div>
 
-                                    <div  class="col-md-4">
+                                    <div  class="col-md-6">
                                         <div class="form-group">
                                         <label for="NXB_Ma">Nhà xuất bản: </label>
                                         <select id="NXB_Ma" name="NXB_Ma" required class="form-control custom-select" title="Nhà xuất bản">
@@ -253,21 +233,71 @@ include('../includes/db.php');
                                         </div>
                                     </div>
                                 </div>
-                                <br>
-                                <h3>Chi tiết sách</h3>
+
                                 <div class="row">
-                                    <div class="col-md-2">
+                                    <div class="col-12">
+                                        <!-- Thêm một tiêu đề cho phần này -->
+                                        <h4 class="text-primary mb-2">Thông tin thời gian</h4>
+                                        <!-- Hiển thị thông tin thời gian với định dạng đẹp hơn -->
+                                        <div class="d-flex justify-content-between">
+                                            <h5><strong>Thời gian tạo:</strong> <?php echo $S_ThoiGianTao; ?></h5>
+                                            <?php if($S_ThoiGianCapNhat) 
+                                                echo "<h5><strong>Thời gian cập nhật lần cuối:</strong> $S_ThoiGianCapNhat</h5>";
+                                            
+                                            ?>
+                                                    
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    
+                                    <div  class="col-md-4">
+                                        <div class="form-group">
+                                        <label for="K_Ma">Lưu vào kho</label>
+                                        <select id="K_Ma" name="K_Ma" required class="form-control custom-select" onchange="showQuantity(this.value)">
+                                             <option value="" disabled selected>Chọn kho lưu trữ</option>
+
+                                                <?php 
+                                                    $query_kho = "SELECT * FROM `kho`";
+                                                    $result_kho = mysqli_query($connection, $query_kho);
+                                                    
+                                                    while ($row = mysqli_fetch_assoc($result_kho)) {
+                                                        $idx = (int) substr($row['K_Ma'], 1);
+                                                        echo "<option value='{$row['K_Ma']}'>$idx - {$row['K_Ten']}</option>";
+                                                    }
+                                                    
+                                                ?>
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
                                             <div class="form-group">
                                             <label for="s_soluong">Số lượng: </label>
                                             <input value="" id="s_soluong" name="s_soluong" required type="number" class="form-control" min="1">
                                             </div>
                                     </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                        <label for="s_dongia">Đơn giá: </label>
+                                        <input value="<?php echo $row_donGia['GNY_DonGia']; ?>" class="form-control" min="1000" type="number" name="s_dongia" id="s_dongia" required>
+                                        </div>
+                                        </div>
+                                </div>
+                                <br>
+
+
+                                <h3>Chi tiết sách</h3>
+                                <div class="row">
+                                    
                                     <div class="col-md-2">
                                         <div class="form-group">
                                         <label for="s_trongluong">Trọng lượng (g)</label>
                                         <input id="s_trongluong" name="s_trongluong" value="<?php echo $S_TrongLuong; ?>" type="number" class="form-control" min="0">
+                                        </div>
                                     </div>
-                                    </div>
+                                    
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="s_kichthuoc">Kích thước (Dài x Rộng x Cao) cm</label>
@@ -280,7 +310,7 @@ include('../includes/db.php');
                                             <input id="s_sotrang" name="s_sotrang" value="<?php echo $S_SoTrang; ?>" type="number" class="form-control" min="1" value="100">
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="s_hinhthuc">Hình thức</label>
                                             <select id="s_hinhthuc" name="s_hinhthuc" class="form-control custom-select" title="Language">

@@ -11,7 +11,7 @@
     <meta content="Themesdesign" name="author" />
     
     <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link rel="shortcut icon" href="assets/images/Logo.png">
 
     <!-- Bootstrap Css -->
     <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
@@ -57,7 +57,7 @@
                     <div class="navbar-brand-box">
                         <a href="index.php" class="logo logo-dark">
                             <span class="logo-sm">
-                                <img src="/booktopia/assets/images/Booktopia-logo.png" alt="" height="22">
+                                <img src="/booktopia/assets/images/logo-small.png" alt="" height="22">
                             </span>
                             <span class="logo-lg">
                                 <img src="/booktopia/assets/images/Booktopia-logo.png" alt="" height="18">
@@ -66,10 +66,10 @@
 
                         <a href="index.php" class="logo logo-light">
                             <span class="logo-sm">
-                                <img src="/booktopia/assets/images/Booktopia-logo.png" alt="" width="30">
+                                <img src="/booktopia/assets/images/logo.png" alt="" width="30">
                             </span>
                             <span class="logo-lg">
-                                <img src="/booktopia/assets/images/Booktopia-logo.png" alt="" width="180" >
+                                <img src="/booktopia/assets/images/logo-small.png" alt="" width="180" height="50">
                             </span>
                         </a>
                     </div>

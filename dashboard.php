@@ -54,7 +54,7 @@ if (!isset($_SESSION['ND_Ma'])) {
 
 
 
-        <main class="page-content">
+            <main class="page-content">
             <!-- Begin Hiraola's Account Page Area -->
             <div class="account-page-area">
                 <div class="container">
